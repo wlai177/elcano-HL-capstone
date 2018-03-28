@@ -53,8 +53,8 @@ Adafruit_L3GD20 gyro(GYRO_CS, GYRO_DO, GYRO_DI, GYRO_CLK);
 void setup() {
 //  SDSetup();
 //  GPSSetup();
-//  CompassSetup();
-//  GyroSetup();
+  CompassSetup();
+  GyroSetup();
 
 }
 
@@ -68,11 +68,11 @@ void loop() {
   //TestGPS();
   //delay(1000);
   
-  //TestCompass();
-  //delay(1000);
+  TestCompass();
+  delay(1000);
   
-  //TestGyro();
-  //delay(1000);
+TestGyro();
+  delay(1000);
 }
 
 

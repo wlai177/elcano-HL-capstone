@@ -17999,8 +17999,11 @@ CAN_RX
 <segment>
 <pinref part="U$1" gate="G$1" pin="SCL1"/>
 <wire x1="132.08" y1="53.34" x2="132.08" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="132.08" y1="43.18" x2="152.4" y2="43.18" width="0.1524" layer="91"/>
+<wire x1="132.08" y1="43.18" x2="149.86" y2="43.18" width="0.1524" layer="91"/>
 <label x="152.4" y="43.18" size="1.778" layer="95"/>
+<pinref part="R4" gate="G$1" pin="2"/>
+<wire x1="149.86" y1="43.18" x2="152.4" y2="43.18" width="0.1524" layer="91"/>
+<junction x="149.86" y="43.18"/>
 </segment>
 <segment>
 <pinref part="J2" gate="G$1" pin="1"/>
@@ -18020,8 +18023,11 @@ CAN_RX
 <segment>
 <pinref part="U$1" gate="G$1" pin="SDA1"/>
 <wire x1="129.54" y1="53.34" x2="129.54" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="129.54" y1="40.64" x2="152.4" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="129.54" y1="40.64" x2="142.24" y2="40.64" width="0.1524" layer="91"/>
 <label x="152.4" y="40.64" size="1.778" layer="95"/>
+<pinref part="R5" gate="G$1" pin="2"/>
+<wire x1="142.24" y1="40.64" x2="152.4" y2="40.64" width="0.1524" layer="91"/>
+<junction x="142.24" y="40.64"/>
 </segment>
 <segment>
 <pinref part="J2" gate="G$1" pin="2"/>

@@ -20313,11 +20313,6 @@ Vin</text>
 <label x="86.36" y="109.22" size="1.778" layer="95"/>
 <pinref part="JP8" gate="G$1" pin="3"/>
 </segment>
-<segment>
-<wire x1="81.28" y1="93.98" x2="91.44" y2="93.98" width="0.1524" layer="91"/>
-<label x="86.36" y="93.98" size="1.778" layer="95"/>
-<pinref part="JP9" gate="G$1" pin="3"/>
-</segment>
 </net>
 <net name="SDA1" class="0">
 <segment>
@@ -20342,6 +20337,11 @@ Vin</text>
 <pinref part="TP6" gate="G$1" pin="TP"/>
 <wire x1="363.22" y1="50.8" x2="365.76" y2="50.8" width="0.1524" layer="91"/>
 <label x="365.76" y="50.8" size="1.778" layer="95"/>
+</segment>
+<segment>
+<wire x1="81.28" y1="93.98" x2="91.44" y2="93.98" width="0.1524" layer="91"/>
+<label x="86.36" y="93.98" size="1.778" layer="95"/>
+<pinref part="JP9" gate="G$1" pin="3"/>
 </segment>
 </net>
 <net name="CANL" class="0">

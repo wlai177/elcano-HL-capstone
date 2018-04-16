@@ -1118,11 +1118,11 @@
 <text x="-35.56" y="-12.7" size="1.27" layer="94">Debug - Gnd</text>
 <text x="-35.56" y="-7.62" size="1.27" layer="94">Debug - SWDIO</text>
 <text x="-35.56" y="-10.16" size="1.27" layer="94">Debug - SWCLK</text>
-<text x="-15.24" y="5.08" size="2.54" layer="94" font="vector" ratio="10">DUE Shield</text>
+<text x="-15.24" y="5.08" size="2.54" layer="94" font="vector" ratio="10">Arduino Due</text>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="DUE(NORMAL)" prefix="MCU">
+<deviceset name="DUE(NORMAL)">
 <gates>
 <gate name="G$1" symbol="DUE(NORMAL)" x="0" y="-2.54"/>
 </gates>

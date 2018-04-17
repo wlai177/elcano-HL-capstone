@@ -2122,7 +2122,7 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="DUE(NORMAL)">
+<deviceset name="DUE(NORMAL)" prefix="MCU">
 <gates>
 <gate name="G$1" symbol="DUE(NORMAL)" x="0" y="-2.54"/>
 </gates>

@@ -1118,11 +1118,11 @@
 <text x="-35.56" y="-12.7" size="1.27" layer="94">Debug - Gnd</text>
 <text x="-35.56" y="-7.62" size="1.27" layer="94">Debug - SWDIO</text>
 <text x="-35.56" y="-10.16" size="1.27" layer="94">Debug - SWCLK</text>
-<text x="-15.24" y="5.08" size="2.54" layer="94" font="vector" ratio="10">Arduino Due</text>
+<text x="-15.24" y="5.08" size="2.54" layer="94" font="vector" ratio="10">DUE Shield</text>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="DUE(NORMAL)" prefix="MCU">
+<deviceset name="DUE(NORMAL)">
 <gates>
 <gate name="G$1" symbol="DUE(NORMAL)" x="0" y="-2.54"/>
 </gates>
@@ -19298,39 +19298,21 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </packages>
 <symbols>
 <symbol name="ELGPS">
-<pin name="3.3V" x="-15.24" y="22.86" length="middle" direction="pwr"/>
-<pin name="EN" x="-15.24" y="20.32" length="middle"/>
-<pin name="VBAT" x="-15.24" y="17.78" length="middle" direction="pwr"/>
-<pin name="FIX" x="-15.24" y="15.24" length="middle"/>
-<pin name="TX" x="-15.24" y="12.7" length="middle" direction="out"/>
-<pin name="RX" x="-15.24" y="10.16" length="middle" direction="in"/>
-<pin name="GND" x="-15.24" y="7.62" length="middle" direction="pwr"/>
-<pin name="VIN" x="-15.24" y="5.08" length="middle" direction="pwr"/>
-<pin name="PPS" x="-15.24" y="2.54" length="middle"/>
-<wire x1="-10.16" y1="0" x2="-10.16" y2="2.54" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="2.54" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="5.08" x2="-10.16" y2="7.62" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="7.62" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="10.16" x2="-10.16" y2="12.7" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="12.7" x2="-10.16" y2="15.24" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="15.24" x2="-10.16" y2="17.78" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="17.78" x2="-10.16" y2="20.32" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="20.32" x2="-10.16" y2="22.86" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="22.86" x2="-10.16" y2="25.4" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="25.4" x2="0" y2="25.4" width="0.254" layer="94"/>
-<wire x1="0" y1="25.4" x2="0" y2="0" width="0.254" layer="94"/>
-<wire x1="0" y1="0" x2="-10.16" y2="0" width="0.254" layer="94"/>
-<text x="-10.16" y="25.4" size="1.27" layer="95">&gt;NAME</text>
-<text x="-10.16" y="-2.54" size="1.27" layer="96">&gt;VALUE</text>
-<wire x1="-7.62" y1="22.86" x2="-10.16" y2="22.86" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="20.32" x2="-10.16" y2="20.32" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="17.78" x2="-10.16" y2="17.78" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="15.24" x2="-10.16" y2="15.24" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="12.7" x2="-10.16" y2="12.7" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="7.62" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="5.08" x2="-10.16" y2="5.08" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="2.54" x2="-10.16" y2="2.54" width="0.254" layer="94"/>
+<pin name="3V3" x="-5.08" y="22.86" length="middle" direction="nc"/>
+<pin name="EN" x="-5.08" y="20.32" length="middle"/>
+<pin name="VBAT" x="-5.08" y="17.78" length="middle" direction="nc"/>
+<pin name="FIX" x="-5.08" y="15.24" length="middle"/>
+<pin name="TX" x="-5.08" y="12.7" length="middle" direction="out"/>
+<pin name="RX" x="-5.08" y="10.16" length="middle" direction="in"/>
+<pin name="GND" x="-5.08" y="7.62" length="middle" direction="pwr"/>
+<pin name="VIN" x="-5.08" y="5.08" length="middle" direction="pwr"/>
+<pin name="PPS" x="-5.08" y="2.54" length="middle"/>
+<wire x1="0" y1="0" x2="0" y2="25.4" width="0.254" layer="94"/>
+<wire x1="0" y1="25.4" x2="10.16" y2="25.4" width="0.254" layer="94"/>
+<wire x1="10.16" y1="25.4" x2="10.16" y2="0" width="0.254" layer="94"/>
+<wire x1="10.16" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<text x="0" y="27.94" size="1.27" layer="95">&gt;NAME</text>
+<text x="0" y="-2.54" size="1.27" layer="96">&gt;VALUE</text>
 </symbol>
 </symbols>
 <devicesets>
@@ -19342,7 +19324,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <devices>
 <device name="" package="ELGPS">
 <connects>
-<connect gate="G$1" pin="3.3V" pad="9"/>
+<connect gate="G$1" pin="3V3" pad="9"/>
 <connect gate="G$1" pin="EN" pad="8"/>
 <connect gate="G$1" pin="FIX" pad="6"/>
 <connect gate="G$1" pin="GND" pad="3"/>
@@ -19422,7 +19404,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pin name="DRDY" x="-2.54" y="10.16" length="short"/>
 <pin name="GND" x="-2.54" y="7.62" length="short" direction="pwr"/>
 <pin name="VIN" x="-2.54" y="5.08" length="short" direction="pwr"/>
-<pin name="3V3" x="-2.54" y="2.54" length="short" direction="pwr"/>
+<pin name="3V3" x="-2.54" y="2.54" length="short" direction="nc"/>
 <wire x1="0" y1="22.86" x2="0" y2="20.32" width="0.1524" layer="94"/>
 <wire x1="0" y1="20.32" x2="0" y2="17.78" width="0.1524" layer="94"/>
 <text x="-2.54" y="22.86" size="1.778" layer="95">&gt;NAME</text>
@@ -19563,12 +19545,10 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="J1" library="SparkFun-Connectors" library_urn="urn:adsk.eagle:library:513" deviceset="CONN_10" device="&quot;" package3d_urn="urn:adsk.eagle:package:38157/1" value="Optical Mouse"/>
 <part name="TP1" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="PAD1-17" package3d_urn="urn:adsk.eagle:package:27949/1"/>
 <part name="TP2" library="testpad" library_urn="urn:adsk.eagle:library:385" deviceset="TP" device="PAD1-17" package3d_urn="urn:adsk.eagle:package:27949/1"/>
-<part name="U2" library="ELSHIFTER" deviceset="ELSHIFTER" device=""/>
-<part name="GPS" library="ELGPS" deviceset="ELGPS" device="" value="ELGPS">
-<attribute name="SPICEPREFIX" value="X"/>
-</part>
+<part name="U2" library="ELSHIFTER" deviceset="ELSHIFTER" device="" value="LLSHIFTER"/>
 <part name="U1" library="ELCOMPASS" deviceset="ELCOMPASS" device="" value="COMPASS"/>
-<part name="U4" library="ELCOMPASS" deviceset="ELCOMPASS" device=""/>
+<part name="U4" library="ELCOMPASS" deviceset="ELCOMPASS" device="" value="COMPASS"/>
+<part name="U3" library="ELGPS" deviceset="ELGPS" device="" value="GPS"/>
 </parts>
 <sheets>
 <sheet>
@@ -19742,9 +19722,9 @@ Vin</text>
 <attribute name="TP_SIGNAL_NAME" x="361.95" y="74.93" size="1.778" layer="97" rot="R90"/>
 </instance>
 <instance part="U2" gate="G$1" x="284.48" y="78.74"/>
-<instance part="GPS" gate="G$1" x="17.78" y="144.78" rot="MR0"/>
 <instance part="U1" gate="G$1" x="30.48" y="101.6" rot="MR0"/>
 <instance part="U4" gate="G$1" x="60.96" y="127" rot="R90"/>
+<instance part="U3" gate="G$1" x="27.94" y="144.78" rot="MR0"/>
 </instances>
 <busses>
 </busses>
@@ -19789,7 +19769,7 @@ Vin</text>
 <segment>
 <wire x1="33.02" y1="152.4" x2="43.18" y2="152.4" width="0.1524" layer="91"/>
 <label x="38.1" y="152.4" size="1.778" layer="95"/>
-<pinref part="GPS" gate="G$1" pin="GND"/>
+<pinref part="U3" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <wire x1="33.02" y1="180.34" x2="43.18" y2="180.34" width="0.1524" layer="91"/>
@@ -19964,7 +19944,7 @@ Vin</text>
 <segment>
 <wire x1="33.02" y1="160.02" x2="43.18" y2="160.02" width="0.1524" layer="91"/>
 <label x="38.1" y="160.02" size="1.778" layer="95"/>
-<pinref part="GPS" gate="G$1" pin="FIX"/>
+<pinref part="U3" gate="G$1" pin="FIX"/>
 </segment>
 <segment>
 <pinref part="MCU1" gate="G$1" pin="30"/>
@@ -19976,7 +19956,7 @@ Vin</text>
 <segment>
 <wire x1="33.02" y1="157.48" x2="43.18" y2="157.48" width="0.1524" layer="91"/>
 <label x="38.1" y="157.48" size="1.778" layer="95"/>
-<pinref part="GPS" gate="G$1" pin="TX"/>
+<pinref part="U3" gate="G$1" pin="TX"/>
 </segment>
 <segment>
 <pinref part="MCU1" gate="G$1" pin="TX3"/>
@@ -19993,7 +19973,7 @@ Vin</text>
 <segment>
 <wire x1="33.02" y1="154.94" x2="43.18" y2="154.94" width="0.1524" layer="91"/>
 <label x="38.1" y="154.94" size="1.778" layer="95"/>
-<pinref part="GPS" gate="G$1" pin="RX"/>
+<pinref part="U3" gate="G$1" pin="RX"/>
 </segment>
 <segment>
 <pinref part="MCU1" gate="G$1" pin="RX3"/>
@@ -20010,7 +19990,7 @@ Vin</text>
 <segment>
 <wire x1="33.02" y1="147.32" x2="43.18" y2="147.32" width="0.1524" layer="91"/>
 <label x="38.1" y="147.32" size="1.778" layer="95"/>
-<pinref part="GPS" gate="G$1" pin="PPS"/>
+<pinref part="U3" gate="G$1" pin="PPS"/>
 </segment>
 <segment>
 <pinref part="MCU1" gate="G$1" pin="29"/>
@@ -20551,7 +20531,7 @@ Vin</text>
 <segment>
 <pinref part="JP4" gate="A" pin="1"/>
 <wire x1="43.18" y1="149.86" x2="33.02" y2="149.86" width="0.1524" layer="91"/>
-<pinref part="GPS" gate="G$1" pin="VIN"/>
+<pinref part="U3" gate="G$1" pin="VIN"/>
 </segment>
 </net>
 <net name="SCL1" class="0">
@@ -20808,7 +20788,7 @@ Vin</text>
 <segment>
 <wire x1="33.02" y1="165.1" x2="43.18" y2="165.1" width="0.1524" layer="91"/>
 <label x="38.1" y="165.1" size="1.778" layer="95"/>
-<pinref part="GPS" gate="G$1" pin="EN"/>
+<pinref part="U3" gate="G$1" pin="EN"/>
 </segment>
 <segment>
 <pinref part="MCU1" gate="G$1" pin="31"/>

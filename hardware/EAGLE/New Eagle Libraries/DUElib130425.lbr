@@ -7,15 +7,15 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="yes"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
@@ -518,7 +518,7 @@
 <pad name="RX1" x="6.35" y="30.48" drill="1" shape="long" rot="R90"/>
 <pad name="SDA" x="8.89" y="30.48" drill="1" shape="long" rot="R90"/>
 <pad name="SCL" x="11.43" y="30.48" drill="1" shape="long" rot="R90"/>
-<pad name="AREF" x="-50.8" y="30.48" drill="1" shape="long" rot="R90"/>
+<pad name="AREF" x="-50.8" y="30.48" drill="1" shape="long" rot="R270"/>
 <pad name="GND1" x="-48.26" y="30.48" drill="1" shape="long" rot="R90"/>
 <pad name="13" x="-45.72" y="30.48" drill="1" shape="long" rot="R90"/>
 <pad name="12" x="-43.18" y="30.48" drill="1" shape="long" rot="R90"/>
@@ -579,52 +579,52 @@
 <pad name="A6" x="-8.89" y="-17.78" drill="1" shape="long" rot="R90"/>
 <pad name="A7" x="-6.35" y="-17.78" drill="1" shape="long" rot="R90"/>
 <pad name="A2" x="-19.05" y="-17.78" drill="1" shape="long" rot="R90"/>
-<text x="-42.545" y="-19.685" size="1.27" layer="21" rot="R270">Rst</text>
-<text x="-40.005" y="-19.685" size="1.27" layer="21" rot="R270">3v3</text>
-<text x="-37.465" y="-19.685" size="1.27" layer="21" rot="R270">5v</text>
-<text x="-34.925" y="-19.685" size="1.27" layer="21" rot="R270">Gnd</text>
-<text x="-32.385" y="-19.685" size="1.27" layer="21" rot="R270">Gnd</text>
-<text x="-29.845" y="-19.685" size="1.27" layer="21" rot="R270">Vin</text>
-<text x="-24.765" y="-19.685" size="1.27" layer="21" rot="R270">A0</text>
-<text x="-22.225" y="-19.685" size="1.27" layer="21" rot="R270">A1</text>
-<text x="-19.685" y="-19.685" size="1.27" layer="21" rot="R270">A2</text>
-<text x="-17.145" y="-19.685" size="1.27" layer="21" rot="R270">A3</text>
-<text x="-14.605" y="-19.685" size="1.27" layer="21" rot="R270">A4</text>
-<text x="-12.065" y="-19.685" size="1.27" layer="21" rot="R270">A5</text>
-<text x="-9.525" y="-19.685" size="1.27" layer="21" rot="R270">A6</text>
-<text x="-6.985" y="-19.685" size="1.27" layer="21" rot="R270">A7</text>
-<text x="-1.905" y="-19.685" size="1.27" layer="21" rot="R270">A8</text>
-<text x="0.635" y="-19.685" size="1.27" layer="21" rot="R270">A9</text>
-<text x="3.175" y="-19.685" size="1.27" layer="21" rot="R270">A10</text>
-<text x="5.715" y="-19.685" size="1.27" layer="21" rot="R270">A11</text>
-<text x="8.255" y="-19.685" size="1.27" layer="21" rot="R270">DAC0</text>
-<text x="10.795" y="-19.685" size="1.27" layer="21" rot="R270">DAC1</text>
-<text x="13.335" y="-19.685" size="1.27" layer="21" rot="R270">cnRX</text>
-<text x="15.875" y="-19.685" size="1.27" layer="21" rot="R270">cnTX</text>
-<text x="-50.165" y="32.385" size="1.27" layer="21" rot="R90">Aref</text>
-<text x="-47.625" y="32.385" size="1.27" layer="21" rot="R90">Gnd</text>
-<text x="-45.085" y="32.385" size="1.27" layer="21" rot="R90">13</text>
-<text x="-42.545" y="32.385" size="1.27" layer="21" rot="R90">12</text>
-<text x="-40.005" y="32.385" size="1.27" layer="21" rot="R90">11</text>
-<text x="-37.465" y="32.385" size="1.27" layer="21" rot="R90">10</text>
-<text x="-34.925" y="32.385" size="1.27" layer="21" rot="R90">9</text>
-<text x="-32.385" y="32.385" size="1.27" layer="21" rot="R90">8</text>
-<text x="-28.575" y="32.385" size="1.27" layer="21" rot="R90">7</text>
-<text x="-26.035" y="32.385" size="1.27" layer="21" rot="R90">6</text>
-<text x="-23.495" y="32.385" size="1.27" layer="21" rot="R90">5</text>
-<text x="-20.955" y="32.385" size="1.27" layer="21" rot="R90">4</text>
-<text x="-18.415" y="32.385" size="1.27" layer="21" rot="R90">3</text>
-<text x="-15.875" y="32.385" size="1.27" layer="21" rot="R90">2</text>
-<text x="-13.335" y="32.385" size="1.27" layer="21" rot="R90">Tx0</text>
-<text x="-10.795" y="32.385" size="1.27" layer="21" rot="R90">Rx0</text>
-<text x="-5.715" y="32.385" size="1.27" layer="21" rot="R90">Tx3(14)</text>
-<text x="-3.175" y="32.385" size="1.27" layer="21" rot="R90">Rx3(15)</text>
-<text x="-0.635" y="32.385" size="1.27" layer="21" rot="R90">Tx2(16)</text>
-<text x="1.905" y="32.385" size="1.27" layer="21" rot="R90">Rx2(17)</text>
-<text x="4.445" y="32.385" size="1.27" layer="21" rot="R90">Tx1(18)</text>
-<text x="6.985" y="32.385" size="1.27" layer="21" rot="R90">Rx1(19)</text>
-<text x="12.065" y="32.385" size="1.27" layer="21" rot="R90">SCL(21)</text>
-<text x="9.525" y="32.385" size="1.27" layer="21" rot="R90">SDA(20)</text>
+<text x="-42.445" y="-13.685" size="1.27" layer="21" rot="R270">Rst</text>
+<text x="-40.005" y="-13.385" size="1.27" layer="21" rot="R270">3v3</text>
+<text x="-37.465" y="-14.385" size="1.27" layer="21" rot="R270">5v</text>
+<text x="-34.925" y="-12.885" size="1.27" layer="21" rot="R270">Gnd</text>
+<text x="-32.285" y="-12.885" size="1.27" layer="21" rot="R270">Gnd</text>
+<text x="-29.845" y="-13.685" size="1.27" layer="21" rot="R270">Vin</text>
+<text x="-24.865" y="-14.085" size="1.27" layer="21" rot="R270">A0</text>
+<text x="-22.225" y="-13.985" size="1.27" layer="21" rot="R270">A1</text>
+<text x="-19.785" y="-14.085" size="1.27" layer="21" rot="R270">A2</text>
+<text x="-17.345" y="-14.085" size="1.27" layer="21" rot="R270">A3</text>
+<text x="-14.705" y="-14.085" size="1.27" layer="21" rot="R270">A4</text>
+<text x="-12.065" y="-14.185" size="1.27" layer="21" rot="R270">A5</text>
+<text x="-9.625" y="-14.085" size="1.27" layer="21" rot="R270">A6</text>
+<text x="-7.085" y="-14.085" size="1.27" layer="21" rot="R270">A7</text>
+<text x="-1.905" y="-14.085" size="1.27" layer="21" rot="R270">A8</text>
+<text x="0.535" y="-14.185" size="1.27" layer="21" rot="R270">A9</text>
+<text x="3.075" y="-13.085" size="1.27" layer="21" rot="R270">A10</text>
+<text x="5.615" y="-13.285" size="1.27" layer="21" rot="R270">A11</text>
+<text x="8.255" y="-11.585" size="1.27" layer="21" rot="R270">DAC0</text>
+<text x="10.695" y="-11.585" size="1.27" layer="21" rot="R270">DAC1</text>
+<text x="13.235" y="-11.885" size="1.27" layer="21" rot="R270">cnRX</text>
+<text x="15.675" y="-11.985" size="1.27" layer="21" rot="R270">cnTX</text>
+<text x="-50.165" y="25.635" size="1.27" layer="21" rot="R90">Aref</text>
+<text x="-47.625" y="25.635" size="1.27" layer="21" rot="R90">Gnd</text>
+<text x="-44.985" y="27.005" size="1.27" layer="21" rot="R90">13</text>
+<text x="-42.545" y="27.005" size="1.27" layer="21" rot="R90">12</text>
+<text x="-40.005" y="27.105" size="1.27" layer="21" rot="R90">11</text>
+<text x="-37.465" y="27.005" size="1.27" layer="21" rot="R90">10</text>
+<text x="-34.925" y="27.975" size="1.27" layer="21" rot="R90">9</text>
+<text x="-32.285" y="27.985" size="1.27" layer="21" rot="R90">8</text>
+<text x="-28.475" y="27.985" size="1.27" layer="21" rot="R90">7</text>
+<text x="-25.935" y="27.985" size="1.27" layer="21" rot="R90">6</text>
+<text x="-23.395" y="27.985" size="1.27" layer="21" rot="R90">5</text>
+<text x="-20.855" y="27.985" size="1.27" layer="21" rot="R90">4</text>
+<text x="-18.315" y="27.985" size="1.27" layer="21" rot="R90">3</text>
+<text x="-15.975" y="27.985" size="1.27" layer="21" rot="R90">2</text>
+<text x="-13.335" y="25.985" size="1.27" layer="21" rot="R90">Tx0</text>
+<text x="-10.795" y="25.785" size="1.27" layer="21" rot="R90">Rx0</text>
+<text x="-5.915" y="22.785" size="1.27" layer="21" rot="R90">Tx3(14)</text>
+<text x="-3.275" y="22.585" size="1.27" layer="21" rot="R90">Rx3(15)</text>
+<text x="-0.735" y="22.785" size="1.27" layer="21" rot="R90">Tx2(16)</text>
+<text x="1.805" y="22.585" size="1.27" layer="21" rot="R90">Rx2(17)</text>
+<text x="4.345" y="22.785" size="1.27" layer="21" rot="R90">Tx1(18)</text>
+<text x="6.785" y="22.585" size="1.27" layer="21" rot="R90">Rx1(19)</text>
+<text x="11.965" y="22.285" size="1.27" layer="21" rot="R90">SCL(21)</text>
+<text x="9.325" y="22.085" size="1.27" layer="21" rot="R90">SDA(20)</text>
 <text x="17.145" y="31.115" size="1.27" layer="21" rot="R180">5v</text>
 <text x="17.145" y="28.575" size="1.27" layer="21" rot="R180">22</text>
 <text x="17.145" y="26.035" size="1.27" layer="21" rot="R180">24</text>
@@ -758,9 +758,9 @@
 <pad name="RESET_ICSP" x="-11.43" y="5.08" drill="0.7" diameter="1.6764"/>
 <pad name="SCK_ICSP" x="-11.43" y="7.62" drill="0.7" diameter="1.6764"/>
 <pad name="MISO_ICSP" x="-11.43" y="10.16" drill="0.7" diameter="1.6764" shape="square"/>
-<text x="-45.085" y="-19.685" size="1.27" layer="21" ratio="5" rot="R270">IOref</text>
-<text x="-52.705" y="32.385" size="1.27" layer="21" ratio="5" rot="R90">SDA1</text>
-<text x="-55.245" y="32.385" size="1.27" layer="21" ratio="5" rot="R90">SCL1</text>
+<text x="-45.085" y="-12.485" size="1.27" layer="21" ratio="5" rot="R270">IOref</text>
+<text x="-52.705" y="24.465" size="1.27" layer="21" ratio="5" rot="R90">SDA1</text>
+<text x="-55.345" y="24.665" size="1.27" layer="21" ratio="5" rot="R90">SCL1</text>
 <text x="-13.335" y="10.795" size="1.27" layer="21" ratio="5" rot="R180">MISO</text>
 <text x="-13.335" y="8.255" size="1.27" layer="21" ratio="5" rot="R180">SCK</text>
 <text x="-6.985" y="6.985" size="1.27" layer="21" ratio="5">MOSI</text>
@@ -845,7 +845,6 @@
 <wire x1="-45.72" y1="-18.415" x2="-45.085" y2="-19.05" width="0.127" layer="21"/>
 <wire x1="-45.085" y1="-19.05" x2="-43.815" y2="-19.05" width="0.127" layer="21"/>
 <wire x1="-43.815" y1="-19.05" x2="-43.18" y2="-18.415" width="0.127" layer="21"/>
-<pad name="AREF1" x="-50.8" y="30.48" drill="1" shape="long" rot="R90"/>
 <rectangle x1="-53.594" y1="30.226" x2="-53.086" y2="30.734" layer="21"/>
 <rectangle x1="-56.134" y1="30.226" x2="-55.626" y2="30.734" layer="21"/>
 <rectangle x1="-49.784" y1="23.876" x2="-49.276" y2="24.384" layer="21"/>

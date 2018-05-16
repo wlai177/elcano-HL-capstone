@@ -18,7 +18,7 @@ struct PositionData {
 	long x_Pos_mm;
 	long y_Pos_mm;
 	long bearing_deg;
-	long speed_cmPs;
+	long speed_mmPs;
 	long distance_mm;
 	long sigma_mm;
 	void Clear();

@@ -45,8 +45,10 @@ public:
     float longMinutes;
     
     float cos_lat;
-    
-    //constructor needed here to initialize cos_lat
+    //Default constructor
+    Origin(){}
+    //constructor for hardcoding the Origin in a global scope
+    //cos_lat will be initialized depending on latDeg and latMin
     Origin(int latDeg, float latMin, int longDeg, float longMin);
 };
 

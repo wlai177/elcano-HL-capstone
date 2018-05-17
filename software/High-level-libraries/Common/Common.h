@@ -40,14 +40,15 @@ class Origin
 {
 public:
     int latDegree;
-    float latMinutes;
+    float latFraction;
     int longDegree;
-    float longMinutes;
+    float longFraction;
     
     float cos_lat;
-    //Default constructor
-    Origin(){}
-    //constructor for hardcoding the Origin in a global scope
+    
+    Origin(){} //Defualt constructor
+    
+    //constructor for hardcoding Origin in global scope
     //cos_lat will be initialized depending on latDeg and latMin
     Origin(int latDeg, float latMin, int longDeg, float longMin);
 };
@@ -60,9 +61,9 @@ class waypoint // best estimate of position and state
     // all latitudes and longitudes are recorded as integers.
     // The (east_mm and north_mm) position carries more precision.
     int latDegree;   //  DD
-    float latMinutes;
-    int longDegree; 	// DDD
-    float longMinutes;
+    float latFraction; // .FFFFFF
+    int longDegree; 	// -DDD
+    float longFraction; // .FFFFFF
     long east_mm;  	// x is east; max is 2147 km
     long north_mm;  // y is true north
     long sigma_mm; // standard deviation of position.
@@ -83,11 +84,11 @@ class waypoint // best estimate of position and state
    
     void Compute_mm(Origin &origin);
     void Compute_LatLon(Origin &origin);
-    bool AcquireGPRMC(unsigned long max_wait_ms, Origin &origin);
-    bool AcquireGPGGA(unsigned long max_wait_ms, Origin &origin);
+    bool AcquireGPRMC(unsigned long max_wait_ms);
+    bool AcquireGPGGA(unsigned long max_wait_ms);
     void fuse(waypoint reading, int deltaT_ms, Origin &origin);
     void SetTime(char *pTime, char * pDate);
-    char* GetLatLon(char* parseptr, Origin &origin);
+    char* GetLatLon(char* parseptr);
     char* formPointString();
     bool readPointString(unsigned long max_wait_ms, int channel);
     void   operator=(waypoint& other);

@@ -173,14 +173,14 @@ bool readline(int channel)
   }
 }
 //Constructor for type Origin object 
-Origin::Origin(int latDeg, float latMin, int longDeg, float longMin)
+Origin::Origin(int latDeg, float latFrac, int longDeg, float longFrac)
 {
     latDegree = latDeg;
-    latMinutes = latMin;
+    latFraction = latFrac;
     longDegree = longDeg;
-    longMinutes = longMin;
+    longFraction = longFrac;
         
-    cos_lat = cos((latDegree+latMinutes/60)*TO_RADIANS);
+    cos_lat = cos((latDegree+latFraction)*TO_RADIANS);
 }
 
 /* There are more accurate ways to compute distance between two latitude and longitude points.
@@ -190,25 +190,25 @@ Origin::Origin(int latDeg, float latMin, int longDeg, float longMin)
 void waypoint::Compute_mm(Origin &origin)
 {
     // compute relative to origin, since Arduino double is limited to 6 digits.
-    
-    int    diffWhole;
-    float diffMinutes;
+
+    int diffWhole;
+    float diffFraction;
     long distWhole;
-    long  distMinutes;
+    long  distFraction;
     long dist;
-    
-    diffWhole = longDegree - origin.longDegree;
-    diffMinutes = longMinutes - origin.longMinutes;
+
+    diffWhole = abs(longDegree - origin.longDegree);
+    diffFraction = abs(longFraction - origin.longFraction);
     distWhole = (long)(diffWhole * TO_RADIANS * EARTH_RADIUS_MM);
-    distMinutes = (long)(diffMinutes / 60 * TO_RADIANS * EARTH_RADIUS_MM);
-    dist = distWhole + distMinutes;
+    distFraction = (long)(diffFraction * TO_RADIANS * EARTH_RADIUS_MM);
+    dist = distWhole + distFraction;
     east_mm = (long)(dist * origin.cos_lat);
-    
+
     diffWhole = latDegree - origin.latDegree;
-    diffMinutes = latMinutes - origin.latMinutes;
+    diffFraction = latFraction - origin.latFraction;
     distWhole = diffWhole * TO_RADIANS * EARTH_RADIUS_MM;
-    distMinutes = diffMinutes / 60 * TO_RADIANS * EARTH_RADIUS_MM;
-    dist = distWhole + distMinutes;
+    distFraction = diffFraction * TO_RADIANS * EARTH_RADIUS_MM;
+    dist = distWhole + distFraction;
     north_mm = dist;
 }
 
@@ -216,18 +216,20 @@ void waypoint::Compute_mm(Origin &origin)
 
 void waypoint::Compute_LatLon(Origin &origin)
 {
-    double relative;
-        
-    relative = ((double)east_mm) * (1000000./EARTH_RADIUS_MM * TO_RADIANS * origin.cos_lat);
-        
-    //double val = relative + (origin.longDegree + origin.longMinutes);
-    longDegree = relative + origin.longDegree;
-    longMinutes = relative + origin.longMinutes;
-    
-    relative = ((double)north_mm) * (1000000./EARTH_RADIUS_MM * TO_RADIANS);
-    relative;
-    latDegree = relative +  origin.latDegree;
-    latMinutes = relative + origin.latMinutes;
+    double longitude;
+    double latitude;
+    double theta;
+
+    theta = asin(north_mm/EARTH_RADIUS_MM);
+    latitude =  origin.latDegree + origin.latFraction + (theta / TO_RADIANS);
+    latDegree = latitude;
+    latFraction = latitude - latDegree;
+
+
+    theta = asin(east_mm/EARTH_RADIUS_MM);
+    longitude = -(abs(origin.longDegree) + origin.longFraction) + (theta / TO_RADIANS);
+    longDegree = longitude;
+    longFraction = longDegree - longitude;
 }
 //---------------------------------------------------------
 /*
@@ -283,9 +285,9 @@ bool waypoint::readPointString(unsigned long max_wait_ms, int channel)
 void waypoint::operator=(waypoint& right)
 {
   latDegree =   right.latDegree;
-  latMinutes =  right.latMinutes;
+  latFraction =  right.latFraction;
   longDegree =  right.longDegree;
-  longMinutes = right.longMinutes;
+  longFraction = right.longFraction;
   east_mm =    right.east_mm;
   north_mm =   right.north_mm;
   sigma_mm =   right.sigma_mm;
@@ -299,9 +301,9 @@ void waypoint::operator=(waypoint& right)
 void waypoint::operator=(waypoint* right)
 {
   latDegree =   right->latDegree;
-  latMinutes =  right->longMinutes;
-  longDegree = right->longMinutes;
-  longMinutes = right->longMinutes;
+  latFraction =  right->longFraction;
+  longDegree = right->longDegree;
+  longFraction = right->longFraction;
   east_mm =    right->east_mm;
   north_mm =   right->north_mm;
   sigma_mm =   right->sigma_mm;
@@ -395,7 +397,7 @@ void waypoint::fuse(waypoint GPS_reading, int deltaT_ms, Origin &origin)
     }
 }
 //---------------------------------------------------------- 
-char* waypoint::GetLatLon(char* parseptr, Origin &origin)
+char* waypoint::GetLatLon(char* parseptr)
 {
     uint32_t latitd, longitd;
     char latdir, longdir;
@@ -427,17 +429,15 @@ char* waypoint::GetLatLon(char* parseptr, Origin &origin)
     }       
     // latitude in latDegree = dd, latMinutes = .mmmmmm
     latDegree = latitd/1000000;
-    latMinutes = ((latitd%1000000)/10000)/60;
+    latFraction = ((latitd%1000000)/10000)/60;
     if (latdir == 'S')
        latDegree = -latDegree;
     //longitude in longDegree = ddd, latMinutes = .mmmmmm
     longDegree = longitd/1000000;
-    longMinutes = ((longitd%1000000)/10000)/60;
+    longFraction = ((longitd%1000000)/10000)/60;
     
     if (longdir == 'W')
        longDegree = -longDegree;
-    //compute initialize east/north coordinates
-    Compute_mm(origin);
  
     return parseptr;
 }
@@ -446,7 +446,7 @@ char* waypoint::GetLatLon(char* parseptr, Origin &origin)
 // return 1 if valid, zero if not.
 // wait up to max_wait milliseconds to get a valid signal.
 //origin to call compute_mm inside of GetLatLon
-bool waypoint::AcquireGPRMC(unsigned long max_wait_ms, Origin &origin)
+bool waypoint::AcquireGPRMC(unsigned long max_wait_ms)
 {
   uint8_t groundspeed, trackangle;
   char status ='V'; // V = data invalid
@@ -485,7 +485,7 @@ bool waypoint::AcquireGPRMC(unsigned long max_wait_ms, Origin &origin)
           continue;
       parseptr += 2;      
       // grab latitude & long data, take in origin to also compute east/north
-      parseptr = GetLatLon(parseptr, origin);
+      parseptr = GetLatLon(parseptr);
       // groundspeed
       parseptr = strchr(parseptr, ',')+1;
 //      Serial.println(parseptr);
@@ -519,7 +519,7 @@ bool waypoint::AcquireGPRMC(unsigned long max_wait_ms, Origin &origin)
 // Aquire a GPS $GPGGA signal and fill in the waypoint data.
 // return 1 if valid, zero if not.
 // wait up to max_wait milliseconds to get a valid signal.
-bool waypoint::AcquireGPGGA(unsigned long max_wait_ms, Origin &origin)
+bool waypoint::AcquireGPGGA(unsigned long max_wait_ms)
 {
   
   
@@ -556,7 +556,7 @@ bool waypoint::AcquireGPGGA(unsigned long max_wait_ms, Origin &origin)
       parseptr = strchr(parseptr, ',') + 1;
    
       // grab latitude & long data
-      parseptr = GetLatLon(parseptr, origin);
+      parseptr = GetLatLon(parseptr);
       parseptr = strchr(parseptr, ',') + 1;
       FixIndicator = parseptr[0];  // A = data valid; V = data not valid
       if (FixIndicator == '0')

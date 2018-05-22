@@ -62,7 +62,7 @@ class waypoint // best estimate of position and state
     // The (east_mm and north_mm) position carries more precision.
     int latDegree;   //  DD
     float latFraction; // .FFFFFF
-    int longDegree; 	// -DDD
+    int longDegree; 	// DDD
     float longFraction; // .FFFFFF
     long east_mm;  	// x is east; max is 2147 km
     long north_mm;  // y is true north
@@ -96,6 +96,9 @@ class waypoint // best estimate of position and state
     long  distance_mm(waypoint *other);
     void  vectors(waypoint *other);
     long  distance_mm(long east_mm, long north_mm);
+
+		//newly implemented
+		void UpdatePosFromGPS(float Glatitude, float Glongitude);
 	
 																//#ifdef MEGA
 // The following waypoint methods exist only on the C6 Navigator module.    

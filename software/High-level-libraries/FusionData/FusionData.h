@@ -1,7 +1,6 @@
 // FusionData.h - header included for all functions to fuse the 
 // IMU sensor data, speed data and GPS data
 
-
 #define HEADING_PRECISION 1000000.0
 // Hard coded values
 #define COMPASS_ERROR ((double) 2.0)
@@ -26,14 +25,12 @@ struct PositionData {
     unsigned long time_ms;
 };
 
-void ComputePositionWithDR(PositionData &oldData, PositionData &newData);
 void CopyData(PositionData &oldData, PositionData &newData);
 void TranslateCoordinates(PositionData &in, PositionData &out, int shift);
 void RotateCoordinates(PositionData &gps, long bearing_deg, int direction);
 double LineSlope(double x1, double x2, double y1, double y2);
 double LineIntercept(double x1, double y1, double m1);
-double CrossPointX(double m1, double c1, double m2, double c2);
-double CrossPointY(double m1, double c1, double m2, double c2);
-void FindFuzzyCrossPointXY(PositionData &gps, long distance, long bearing, PositionData &out);
+//double CrossPointY(double m1, double c1, double m2, double c2);
+//void FindFuzzyCrossPointXY(PositionData &gps, long distance, long bearing, PositionData &out);
 
 

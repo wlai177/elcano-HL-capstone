@@ -6,6 +6,8 @@ namespace elcano
 #define EARTH_RADIUS_MM 6371000000.
 #define PIf ((float) 3.1415926)
 #define TO_RADIANS (PIf/180.)
+#define HEADING_PRECISION 1000000.0
+#define DR_ERROR_mm 1000.0
 
 // The buffer size that will hold a GPS sentence. They tend to be 80 characters long.
 // Got weird results with 90; OK with 120.
@@ -39,10 +41,8 @@ namespace elcano
 class Origin
 {
 public:
-    int latDegree;
-    float latFraction;
-    int longDegree;
-    float longFraction;
+	double latitude;
+	double longitude;
     
     float cos_lat;
     
@@ -50,7 +50,7 @@ public:
     
     //constructor for hardcoding Origin in global scope
     //cos_lat will be initialized depending on latDeg and latMin
-    Origin(int latDeg, float latMin, int longDeg, float longMin);
+    Origin(double lat, double log);
 };
 
 class waypoint // best estimate of position and state
@@ -60,13 +60,11 @@ class waypoint // best estimate of position and state
     // Since the Arduino supports only 6 digits of precision in float/double,
     // all latitudes and longitudes are recorded as integers.
     // The (east_mm and north_mm) position carries more precision.
-    int latDegree;   //  DD
-    float latFraction; // .FFFFFF
-    int longDegree; 	// DDD
-    float longFraction; // .FFFFFF
+		double latitude;
+		double longitude;
     long east_mm;  	// x is east; max is 2147 km
     long north_mm;  // y is true north
-    long sigma_mm; // standard deviation of position.
+    long sigma_mm = 3000; // standard deviation of position for GPS. 
     unsigned long time_ms;   // time of reading since start_time, start_date  
     // millis() + offset_ms = waypoint.time_ms
   /*
@@ -76,9 +74,9 @@ class waypoint // best estimate of position and state
   On the Arduino, a float is the same as a double, giving 6 to 7 decimal digits.
   This means that mm resolution only applies within 1 km of the origin.
   */
-  int Evector_x1000;   // 1000 * unit vector pointing east
-  int Nvector_x1000;   // 1000 * unit vector pointing north
-//    int bearing;  // degrees. 0 = North; 90 = East.
+	long Evector_x1000;   // 1000 * unit vector pointing east
+  long Nvector_x1000;   // 1000 * unit vector pointing north
+  long bearing_deg;  // degrees. 0 = North; 90 = East.
     long speed_mmPs; // vehicle speed in mm per second.
     int index;       // used for passing a sequence of waypoints over serial line.
    
@@ -96,10 +94,7 @@ class waypoint // best estimate of position and state
     long  distance_mm(waypoint *other);
     void  vectors(waypoint *other);
     long  distance_mm(long east_mm, long north_mm);
-
-		//newly implemented
-		void UpdatePosFromGPS(float Glatitude, float Glongitude);
-	
+		void Compute_EandN_Vectors(long heading);
 																//#ifdef MEGA
 // The following waypoint methods exist only on the C6 Navigator module.    
 //    void fuse(waypoint GPS_reading, int deltaT_ms);
@@ -110,8 +105,11 @@ class waypoint // best estimate of position and state
        
                                                                 //#endif
 };
-    //Converts provided Longitude and Latitude to MM
-    //bool convertLatLonToMM(long latitude, long longitude);
+	void ComputePositionWithDR(waypoint &oldData, waypoint &newData);
+	void FindFuzzyCrossPointXY(waypoint &gps, waypoint &dr, waypoint &estimated_position);
+	double CrossPointX(double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4);
+	//Converts provided Longitude and Latitude to MM
+	//bool convertLatLonToMM(long latitude, long longitude);
 
 struct curve
 {

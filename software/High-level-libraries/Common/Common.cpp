@@ -1,11 +1,19 @@
 #include <IODue.h>
 #include <Arduino.h>
 #include <Common.h>
+#include <math.h>
 // global variables
 char buffer[BUFFSIZ];        // string buffer for the sentence
 char dataString[BUFFSIZ];
 volatile bool DataAvailable;
 
+char GPSfile[BUFFSIZ] = "mmddhhmm.csv";
+char ObstacleString[BUFFSIZ];
+char StartTime[BUFFSIZ] = "yy,mm,dd,hh,mm,ss,xxx";
+const char TimeHeader[] = "year,month,day,hour,minute,second,msec";
+const char* RawKF = "Raw GPS data,,,,,,Kalman Filtered data";
+const char* Header = "Latitude,Longitude,East_m,North_m,SigmaE_m,SigmaN_m,Time_s,";
+const char* ObstHeader = "Left,Front,Right,Busy";
 
 namespace common {
 /*---------------------------------------------------------------------------------------*/
@@ -156,15 +164,155 @@ namespace elcano {
 			buffer[buffidx++] = c;
 		}
 	}
+	/* Function Determines crosspoint on X-axis */
+	double CrossPointX(double x1, double y1, double x2, double y2,
+										 double x3, double y3, double x4, double y4)
+	{
+	if (x1 == x2 && x3 == x4)
+		return ((x1+x2)/2);
+	if(x1 == x2)
+		return x1;
+	if(x3 == x4)
+		return 3;
+	
+	/* yc = (y4-y3)/(x4-x3)*(xc-x3) + y3 = (y2-y1)/(x2-x1)*(xc-x1)+y1 */
+	double slope1 = (y2-y1)/(x2-x1);
+	double slope3 = (y4-y3)/(x4-x3);
+	
+	if(slope3 == slope1)
+		return ((x2+x2+x3)/4);
+	
+	double xc = (slope3 * x3 - y3 - slope1 * x1 + y1) / (slope3-slope1);
+	return xc;
+	}
+	
+	/* The function calculates position using Dead Reckoning
+	 */
+	void ComputePositionWithDR(waypoint &oldData, waypoint &newData)
+	{
+	//Serial.println("millis(): " + String(millis()));
+	//Serial.print("ComputePositionWithDR::NewTime:");
+	//Serial.print(newData.time_ms);
+	//Serial.print(",OldTime:");
+	//Serial.println(oldData.time_ms);
+	
+	
+	// To check if this is new reading or the same reading
+		if ( newData.time_ms > oldData.time_ms) {
+		
+			// Calculate distance
+			double distance_mm = (newData.time_ms - oldData.time_ms) * (newData.speed_mmPs);
+		
+			//Serial.print("ComputePositionWithDR::newSpeed_mmPs:");
+			//Serial.print(newData.speed_mmPs);
+			//Serial.print(",distance:");
+			//Serial.println(newData.distance_mm);
+		
+			newData.east_mm = oldData.east_mm + cos((newData.bearing_deg / HEADING_PRECISION) * TO_RADIANS) * distance_mm;
+		
+			newData.north_mm = oldData.north_mm + sin((newData.bearing_deg / HEADING_PRECISION) * TO_RADIANS) * distance_mm;
+		
+		
+			//Serial.print("ComputePositionWithDR::X_pos:");
+			//Serial.print(newData.x_Pos);
+			//Serial.print(",Y_pos:");
+			//Serial.println(newData.y_Pos);
+		}
+	}
+	/* This function finds fuzzy crosspoint between GPS & Dead reckoning data
+	 waypoint &gps -> GPS input
+	 waypoint &dr   -> Dead reckoning input
+	 waypoint &fuzzy_out -> Fuzzy output for estimated_position
+	 */
+	void FindFuzzyCrossPointXY(waypoint &gps, waypoint &dr, waypoint &estimated_position)
+	{
+	//if GPS and DR position is the same
+	if (gps.east_mm == dr.east_mm && gps.north_mm == dr.north_mm)
+		{
+		estimated_position.north_mm = dr.north_mm;
+		estimated_position.east_mm = dr.east_mm;
+		return;
+		}
+	
+	if (abs(gps.east_mm - dr.east_mm) > abs(gps.north_mm - dr.north_mm))
+		{  // more change in east
+			if (gps.east_mm >= dr.east_mm)
+				{  // cross point is intersection of line down from DR and line up to GPS
+					// DR down line is from (dr->east_mm, 1) to (dr->east_mm + dr_>sigma_mm,0)
+					// line up to GPS is from (gps->east_mm - gps->sigma_mm, 0) to (gps->east_mm, 1)
+					estimated_position.east_mm = CrossPointX(dr.east_mm,1., dr.east_mm + DR_ERROR_mm, 0,
+																										gps.east_mm - gps.sigma_mm, 0.,gps.east_mm, 1.);
+				}
+			else
+				{  // cross point is intersection of line down from GPS and line up to DR
+					estimated_position.east_mm = CrossPointX(dr.east_mm - DR_ERROR_mm,0., dr.east_mm, 1.,
+																										gps.east_mm, 1.,gps.east_mm + gps.sigma_mm, 0.);
+				}
+			// north position is proportional to east position
+			if (gps.north_mm >= dr.north_mm)
+				{
+				estimated_position.north_mm = dr.north_mm + (gps.north_mm - dr.north_mm) *
+				abs((gps.east_mm-estimated_position.east_mm)/(gps.east_mm - dr.east_mm));
+				}
+				else
+					{
+					estimated_position.north_mm = gps.north_mm + (dr.north_mm - gps.north_mm) *
+					abs((gps.east_mm-estimated_position.east_mm)/(gps.east_mm - dr.east_mm));
+					}
+		}
+	else
+		{  // more change in north
+			// TO DO: similar to above, but swap east and north
+			if(gps.north_mm >= dr.north_mm)
+				{
+				// cross point is intersection of line down from DR and line up to GPS
+				// DR down line is from (1, dr->east_mm) to (0, dr->north_mm + dr_>sigma_mm)
+				// line up to GPS is from (gps->east_mm - gps->sigma_mm, 0) to (gps->east_mm, 1)
+				estimated_position.north_mm = CrossPointX(1.,dr.north_mm, 0, dr.north_mm + DR_ERROR_mm,
+																									0, gps.north_mm - gps.sigma_mm, 1., gps.north_mm);
+				}
+			else
+				{	// cross point is intersection of line down from GPS and line up to DR
+					estimated_position.north_mm = CrossPointX(0, dr.north_mm - DR_ERROR_mm, 1., dr.north_mm,
+																									 1., gps.north_mm, 0, gps.north_mm + gps.sigma_mm);
+				}
+			// east position is proportional to north position
+			if (gps.east_mm >= dr.east_mm)
+				{
+				estimated_position.east_mm = dr.east_mm + (gps.east_mm - dr.east_mm) *
+				abs((gps.north_mm-estimated_position.north_mm)/(gps.north_mm - dr.north_mm));
+				}
+				else
+					{
+					estimated_position.east_mm = gps.east_mm + (dr.east_mm - gps.east_mm) *
+					abs((gps.north_mm-estimated_position.north_mm)/(gps.north_mm - dr.north_mm));
+					}
+		}
+	}
 
 //Constructor for type Origin object
-	Origin::Origin(int latDeg, float latFrac, int longDeg, float longFrac) {
-		latDegree = latDeg;
-		latFraction = latFrac;
-		longDegree = longDeg;
-		longFraction = longFrac;
+	Origin::Origin(double lat, double log) {
+		latitude = lat;
+		longitude = log;
 
-		cos_lat = cos((latDegree + latFraction) * TO_RADIANS);
+		cos_lat = cos((latitude) * TO_RADIANS);
+	}
+	
+	void waypoint::SetTime(char *pTime, char * pDate) {
+		//GPSfile = "mmddhhmm.CSV";
+		strncpy(GPSfile,   pDate + 2, 2); // month
+		strncpy(GPSfile + 2, pDate, 2);  // day
+		strncpy(GPSfile + 4, pTime, 2);  // GMT hour
+		strncpy(GPSfile + 6, pTime + 2, 2); // minute
+		Serial.println(GPSfile);
+		
+		strncpy(StartTime,     pDate + 4, 2); // year
+		strncpy(StartTime + 3,   pDate + 2, 2); // month
+		strncpy(StartTime + 6,   pDate, 2);  // day
+		strncpy(StartTime + 9,   pTime, 2);  // GMT hour
+		strncpy(StartTime + 12,  pTime + 2, 2); // minute
+		strncpy(StartTime + 15,  pTime + 4, 2); // second
+		strncpy(StartTime + 18,  pTime + 7, 3); // millisecond
 	}
 
 /* There are more accurate ways to compute distance between two latitude and longitude points.
@@ -173,44 +321,29 @@ namespace elcano {
 */
 	void waypoint::Compute_mm(Origin &origin) {
 		// compute relative to origin, since Arduino double is limited to 6 digits.
+		double diffWhole;
+		double dist;
 
-		int diffWhole;
-		float diffFraction;
-		long distWhole;
-		long distFraction;
-		long dist;
+		diffWhole = (longitude - origin.longitude);
+		dist = (diffWhole * TO_RADIANS * EARTH_RADIUS_MM);
+	
+		east_mm = (dist * origin.cos_lat);
 
-		diffWhole = abs(longDegree - origin.longDegree);
-		diffFraction = abs(longFraction - origin.longFraction);
-		distWhole = (long) (diffWhole * TO_RADIANS * EARTH_RADIUS_MM);
-		distFraction = (long) (diffFraction * TO_RADIANS * EARTH_RADIUS_MM);
-		dist = distWhole + distFraction;
-		east_mm = (long) (dist * origin.cos_lat);
+		diffWhole = latitude - origin.latitude;
+		dist = diffWhole * TO_RADIANS * EARTH_RADIUS_MM;
 
-		diffWhole = latDegree - origin.latDegree;
-		diffFraction = latFraction - origin.latFraction;
-		distWhole = diffWhole * TO_RADIANS * EARTH_RADIUS_MM;
-		distFraction = diffFraction * TO_RADIANS * EARTH_RADIUS_MM;
-		dist = distWhole + distFraction;
 		north_mm = dist;
 	}
 
 
 	void waypoint::Compute_LatLon(Origin &origin) {
-		double longitude;
-		double latitude;
 		double theta;
 
-		theta = asin(north_mm / EARTH_RADIUS_MM);
-		latitude = origin.latDegree + origin.latFraction + (theta / TO_RADIANS);
-		latDegree = latitude;
-		latFraction = latitude - latDegree;
+		theta = asin((double)north_mm / EARTH_RADIUS_MM);
+		latitude = origin.latitude + (theta / TO_RADIANS);
 
-
-		theta = asin(east_mm / EARTH_RADIUS_MM);
-		longitude = -(abs(origin.longDegree) + origin.longFraction) + (theta / TO_RADIANS);
-		longDegree = longitude;
-		longFraction = longDegree - longitude;
+		theta = asin((double)(east_mm/origin.cos_lat) / EARTH_RADIUS_MM);
+		longitude = origin.longitude + (theta / TO_RADIANS);
 	}
 //---------------------------------------------------------
 /*
@@ -263,10 +396,8 @@ namespace elcano {
 	}
 
 	void waypoint::operator=(waypoint &right) {
-		latDegree = right.latDegree;
-		latFraction = right.latFraction;
-		longDegree = right.longDegree;
-		longFraction = right.longFraction;
+		latitude = right.latitude;
+		longitude = right.longitude;
 		east_mm = right.east_mm;
 		north_mm = right.north_mm;
 		sigma_mm = right.sigma_mm;
@@ -279,10 +410,8 @@ namespace elcano {
 	}
 
 	void waypoint::operator=(waypoint *right) {
-		latDegree = right->latDegree;
-		latFraction = right->longFraction;
-		longDegree = right->longDegree;
-		longFraction = right->longFraction;
+		latitude = right->latitude;
+		longitude = right->longitude;
 		east_mm = right->east_mm;
 		north_mm = right->north_mm;
 		sigma_mm = right->sigma_mm;
@@ -372,11 +501,18 @@ namespace elcano {
 			Nvector_x1000 = (MEG * speedY / speed_mmPs);
 		}
 	}
+	// Calculate and compute the E and N vector 
+	void waypoint::Compute_EandN_Vectors(long heading) {
+		Evector_x1000 = cos((heading / HEADING_PRECISION) * TO_RADIANS) * 1000;
+		Nvector_x1000 =	 sin((heading / HEADING_PRECISION) * TO_RADIANS) * 1000;
+	}
 
 //----------------------------------------------------------
 	char *waypoint::GetLatLon(char *parseptr) {
 		uint32_t latitd, longitd;
 		char latdir, longdir;
+		int latDegree, longDegree;
+		float latFraction, longFraction;
 		uint32_t degree, fraction;
 		latitd = parsedecimal(parseptr);
 		if (latitd != 0) {
@@ -405,14 +541,15 @@ namespace elcano {
 		// latitude in latDegree = dd, latMinutes = .mmmmmm
 		latDegree = latitd / 1000000;
 		latFraction = ((latitd % 1000000) / 10000) / 60;
+		latitude = latDegree + latFraction;
 		if (latdir == 'S')
-			latDegree = -latDegree;
+			latitude = -latitude;
 		//longitude in longDegree = ddd, latMinutes = .mmmmmm
 		longDegree = longitd / 1000000;
 		longFraction = ((longitd % 1000000) / 10000) / 60;
-
+		longitude = longDegree + longFraction;
 		if (longdir == 'W')
-			longDegree = -longDegree;
+			longitude = -longitude;
 
 		return parseptr;
 	}
@@ -486,7 +623,7 @@ namespace elcano {
 		}
 		if (status == 'A')
 			return true;
-		
+
     return false;
 	}
 
@@ -564,18 +701,6 @@ namespace elcano {
 		return true;
 	}
 
-void waypoint::UpdatePosFromGPS(float Glatitude, float Glongitude) {
-	long whole;
-		
-	latDegree = Glatitude / 100;
-	whole = (Glatitude * 10000);
-	latFraction = (whole % 1000000) / 10000.0 / 60.0;
-		
-	longDegree = Glongitude / 100;
-	whole = (Glongitude * 10000);
-	longFraction = (whole % 1000000) / 10000.0 / 60.0;
-	
-}
 
 }
 

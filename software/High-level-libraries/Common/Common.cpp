@@ -208,9 +208,9 @@ namespace elcano {
 			//Serial.print(",distance:");
 			//Serial.println(newData.distance_mm);
 		
-			newData.east_mm = oldData.east_mm + cos((newData.bearing_deg / HEADING_PRECISION) * TO_RADIANS) * distance_mm;
+			newData.east_mm = oldData.east_mm + cos((newData.bearing_deg) * TO_RADIANS) * distance_mm;
 		
-			newData.north_mm = oldData.north_mm + sin((newData.bearing_deg / HEADING_PRECISION) * TO_RADIANS) * distance_mm;
+			newData.north_mm = oldData.north_mm + sin((newData.bearing_deg) * TO_RADIANS) * distance_mm;
 		
 		
 			//Serial.print("ComputePositionWithDR::X_pos:");
@@ -502,9 +502,9 @@ namespace elcano {
 		}
 	}
 	// Calculate and compute the E and N vector 
-	void waypoint::Compute_EandN_Vectors(long heading) {
-		Evector_x1000 = cos((heading / HEADING_PRECISION) * TO_RADIANS) * 1000;
-		Nvector_x1000 =	 sin((heading / HEADING_PRECISION) * TO_RADIANS) * 1000;
+	void waypoint::Compute_EandN_Vectors(long heading_deg) {
+		Evector_x1000 = cos((heading_deg) * TO_RADIANS) * 1000;
+		Nvector_x1000 =	 sin((heading_deg) * TO_RADIANS) * 1000;
 	}
 
 //----------------------------------------------------------

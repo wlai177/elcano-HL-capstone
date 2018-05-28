@@ -93,11 +93,11 @@ void RotateCoordinates(PositionData &gps, long bearing_deg, int direction)
 		// counter-clockwise
 		// x_Pos = x.CosA + y.SinA
 		long temp_x;
-		temp_x = gps.x_Pos_mm * cos(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION) * TO_RADIANS) +
-			gps.y_Pos_mm * sin(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION) * TO_RADIANS );
+		temp_x = gps.x_Pos_mm * cos(((90 * bearing_deg)) * TO_RADIANS) +
+			gps.y_Pos_mm * sin(((90 * bearing_deg)) * TO_RADIANS );
 		// y_Pos = y.CosA - x.SinA
-		gps.y_Pos_mm = gps.y_Pos_mm * cos(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION) * TO_RADIANS) -
-			gps.x_Pos_mm * sin(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION) * TO_RADIANS);
+		gps.y_Pos_mm = gps.y_Pos_mm * cos(((90 * bearing_deg)) * TO_RADIANS) -
+			gps.x_Pos_mm * sin(((90 * bearing_deg)) * TO_RADIANS);
 		gps.x_Pos_mm = temp_x;
 	}
 	else 
@@ -105,11 +105,11 @@ void RotateCoordinates(PositionData &gps, long bearing_deg, int direction)
 		// clockwise
 		// x_Pos = x.CosA - y.SinA
 		long temp_x;
-		temp_x = gps.x_Pos_mm * cos(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION)* TO_RADIANS) -
-			gps.y_Pos_mm * sin(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION) * TO_RADIANS);
+		temp_x = gps.x_Pos_mm * cos(((90 * bearing_deg))* TO_RADIANS) -
+			gps.y_Pos_mm * sin(((90 * bearing_deg)) * TO_RADIANS);
 		// y_Pos = x.SinA + y.CosA
-		gps.y_Pos_mm = gps.x_Pos_mm * sin(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION) * TO_RADIANS) +
-			gps.y_Pos_mm * cos(((90 * HEADING_PRECISION - bearing_deg) / HEADING_PRECISION) * TO_RADIANS);
+		gps.y_Pos_mm = gps.x_Pos_mm * sin(((90 * bearing_deg)) * TO_RADIANS) +
+			gps.y_Pos_mm * cos(((90 * bearing_deg)) * TO_RADIANS);
 		gps.x_Pos_mm = temp_x;
 	}
 
